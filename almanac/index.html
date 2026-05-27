@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Альманах | Bregantazy.art</title>
+
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="site-logo">Bregantazy.art</a>
+
+   <nav class="site-nav" aria-label="Главная навигация">
+  <a href="/" class="nav-link" data-page="home">Главная</a>
+  <a href="/links/" class="nav-link" data-page="links">Ссылки</a>
+  <a href="/thanks/" class="nav-link" data-page="thanks">Спасибо за покупку</a>
+</nav>
+  </header>
+
+  <main class="page">
+    <section class="hero small-hero">
+      <div class="hero-content">
+        <p class="eyebrow">Архив вселенной</p>
+
+        <h1>Альманах</h1>
+
+        <p class="subtitle">
+          Персонажи, сущности, проекты, миры и странные записи Bregantazy.
+          Пока это первая полка архива, но она уже открыта.
+        </p>
+      </div>
+    </section>
+
+    <section class="almanac-section">
+      <div class="section-head">
+        <div>
+          <h2>Первые записи</h2>
+          <p>
+            Здесь будут собираться карточки персонажей и важных элементов мира.
+          </p>
+        </div>
+
+        <input
+          class="search-input"
+          id="almanacSearch"
+          type="search"
+          placeholder="Найти персонажа..."
+        />
+      </div>
+
+      <div class="almanac-grid" id="characterGrid"></div>
+    </section>
+  </main>
+
+  <script src="../script.js"></script>
+</body>
+</html>
