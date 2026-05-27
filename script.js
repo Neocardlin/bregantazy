@@ -1,14 +1,24 @@
-const navLinks = document.querySelectorAll(".nav-link");
+// ========================================
+// Bregantazy.art
+// Основной скрипт сайта
+// ========================================
 
-let currentPage = "home";
+
+// ========================================
+// 1. Подсветка активного раздела меню
+// ========================================
+
+const navLinks = document.querySelectorAll(".nav-link");
 const path = window.location.pathname;
 
-if (path.startsWith("/almanac")) {
-  currentPage = "almanac";
-} else if (path.startsWith("/links")) {
+let currentPage = "home";
+
+if (path.includes("/links")) {
   currentPage = "links";
-} else if (path.startsWith("/thanks")) {
+} else if (path.includes("/thanks")) {
   currentPage = "thanks";
+} else if (path.includes("/almanac")) {
+  currentPage = "almanac";
 }
 
 navLinks.forEach((link) => {
@@ -17,24 +27,46 @@ navLinks.forEach((link) => {
   }
 });
 
+
+// ========================================
+// 2. Альманах персонажей
+// Пока он может быть скрыт, но код готов
+// ========================================
+
 const characterGrid = document.querySelector("#characterGrid");
 const almanacSearch = document.querySelector("#almanacSearch");
 
+// Узнаём корень сайта через путь к самому script.js.
+// Так будет работать и на GitHub Pages, и потом на bregantazy.art.
+const scriptElement = document.currentScript;
+const siteRoot = scriptElement
+  ? scriptElement.src.replace("script.js", "")
+  : "./";
+
+function escapeHTML(text) {
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function createCharacterCard(character) {
   const tags = character.tags
-    .map((tag) => `<span class="tag">${tag}</span>`)
+    .map((tag) => `<span class="tag">${escapeHTML(tag)}</span>`)
     .join("");
 
   return `
     <article class="almanac-card">
       <div class="card-topline">
-        <span>${character.type}</span>
-        <span>${character.project}</span>
+        <span>${escapeHTML(character.type)}</span>
+        <span>${escapeHTML(character.project)}</span>
       </div>
 
-      <h3>${character.name}</h3>
+      <h3>${escapeHTML(character.name)}</h3>
 
-      <p>${character.short}</p>
+      <p>${escapeHTML(character.short)}</p>
 
       <div class="tags">
         ${tags}
@@ -44,14 +76,32 @@ function createCharacterCard(character) {
 }
 
 function renderCharacters(characters) {
+  if (!characterGrid) return;
+
+  if (characters.length === 0) {
+    characterGrid.innerHTML = `
+      <p class="error-message">
+        Ничего не найдено. Архив молчит, но он явно что-то скрывает.
+      </p>
+    `;
+    return;
+  }
+
   characterGrid.innerHTML = characters.map(createCharacterCard).join("");
 }
 
 async function loadAlmanac() {
+  // Если на странице нет блока characterGrid, значит мы не в Альманахе.
+  // Просто ничего не делаем.
   if (!characterGrid) return;
 
   try {
-    const response = await fetch("/data/characters.json");
+    const response = await fetch(`${siteRoot}data/characters.json`);
+
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки: ${response.status}`);
+    }
+
     const characters = await response.json();
 
     renderCharacters(characters);
