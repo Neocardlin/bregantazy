@@ -2183,3 +2183,24 @@ a.link-card {
     transform: translate(0, 0) rotate(0deg);
   }
 }
+/* =========================
+   Cerbella mobile tap hitbox fix
+   Чтобы на телефоне по Цербелле можно было нажать
+========================= */
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: block !important;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+
+  .cerbella-motion,
+  .cerbella-stack {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art .cerbella-layer {
+    pointer-events: none !important;
+  }
+}

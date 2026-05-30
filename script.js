@@ -753,12 +753,13 @@ loadAlmanac();
 })();
 // ========================================
 // 9. Телефонная анимация Цербеллы по тапу
+// На телефоне тап по видимой Цербелле запускает танец
 // ========================================
 
 (() => {
-  const mobileCharacters = document.querySelectorAll("[data-character-inertia]");
+  const characterArts = document.querySelectorAll(".dossier-character-art");
 
-  if (mobileCharacters.length === 0) return;
+  if (characterArts.length === 0) return;
 
   const isMobileLike = window.matchMedia(
     "(hover: none), (pointer: coarse), (max-width: 800px)"
@@ -766,18 +767,36 @@ loadAlmanac();
 
   if (!isMobileLike) return;
 
-  mobileCharacters.forEach((character) => {
-    character.addEventListener("pointerdown", () => {
-      character.classList.remove("is-figure-eight");
+  function playTapDance(characterArt) {
+    const motion = characterArt.querySelector(".cerbella-motion");
 
-      // Перезапускает CSS-анимацию
-      void character.offsetWidth;
+    if (!motion) return;
 
-      character.classList.add("is-figure-eight");
+    motion.classList.remove("is-figure-eight");
 
-      window.setTimeout(() => {
-        character.classList.remove("is-figure-eight");
-      }, 900);
+    // Перезапуск CSS-анимации
+    void motion.offsetWidth;
+
+    motion.classList.add("is-figure-eight");
+
+    window.setTimeout(() => {
+      motion.classList.remove("is-figure-eight");
+    }, 950);
+  }
+
+  characterArts.forEach((characterArt) => {
+    characterArt.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      playTapDance(characterArt);
     });
+
+    characterArt.addEventListener(
+      "touchstart",
+      (event) => {
+        event.preventDefault();
+        playTapDance(characterArt);
+      },
+      { passive: false }
+    );
   });
 })();
