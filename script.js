@@ -29,19 +29,22 @@ navLinks.forEach((link) => {
 
 
 // ========================================
-// 2. Альманах персонажей
-// Пока он может быть скрыт, но код готов
+// 2. Корень сайта
+// Нужен, чтобы картинки и JSON работали с разных страниц
 // ========================================
 
-const characterGrid = document.querySelector("#characterGrid");
-const almanacSearch = document.querySelector("#almanacSearch");
-
-// Узнаём корень сайта через путь к самому script.js.
-// Так будет работать и на GitHub Pages, и потом на bregantazy.art.
 const scriptElement = document.currentScript;
 const siteRoot = scriptElement
   ? scriptElement.src.replace("script.js", "")
   : "./";
+
+
+// ========================================
+// 3. Альманах персонажей
+// ========================================
+
+const characterGrid = document.querySelector("#characterGrid");
+const almanacSearch = document.querySelector("#almanacSearch");
 
 function escapeHTML(text) {
   return String(text)
@@ -91,8 +94,6 @@ function renderCharacters(characters) {
 }
 
 async function loadAlmanac() {
-  // Если на странице нет блока characterGrid, значит мы не в Альманахе.
-  // Просто ничего не делаем.
   if (!characterGrid) return;
 
   try {
@@ -137,25 +138,24 @@ async function loadAlmanac() {
 }
 
 loadAlmanac();
+
+
 // ========================================
-// Случайное моргание глаза в закладке
+// 4. Живой глаз в закладке
+// При открытии страницы есть шанс моргнуть.
+// Потом глаз иногда моргает сам.
 // ========================================
 
 (() => {
-  const bookmarkEyes = document.querySelectorAll(".bookmark-eye");
+  const eyes = document.querySelectorAll(".bookmark-eye");
 
-  if (bookmarkEyes.length === 0) return;
-
-  const scriptElement = document.currentScript;
-  const siteRoot = scriptElement
-    ? scriptElement.src.replace("script.js", "")
-    : "/";
+  if (eyes.length === 0) return;
 
   const eyeFrames = [
-    `${siteRoot}images/ui/bookmark-eye-1.png`,
+    `${siteRoot}images/ui/bookmark-eye-1.png`, // закрытый
     `${siteRoot}images/ui/bookmark-eye-2.png`,
     `${siteRoot}images/ui/bookmark-eye-3.png`,
-    `${siteRoot}images/ui/bookmark-eye-4.png`,
+    `${siteRoot}images/ui/bookmark-eye-4.png`, // открытый
   ];
 
   const openEye = eyeFrames[3];
@@ -176,7 +176,7 @@ loadAlmanac();
 
     eye.dataset.blinking = "true";
 
-    // закрытие
+    // Закрытие
     eye.src = eyeFrames[2];
     await sleep(70);
 
@@ -186,7 +186,7 @@ loadAlmanac();
     eye.src = eyeFrames[0];
     await sleep(120);
 
-    // открытие
+    // Открытие
     eye.src = eyeFrames[1];
     await sleep(65);
 
@@ -212,93 +212,71 @@ loadAlmanac();
     }, delay);
   }
 
-  preloadFrames();
-
-  bookmarkEyes.forEach((eye) => {
-    eye.src = openEye;
-    scheduleRandomBlink(eye);
-  });
-})();
-// ========================================
-// Шанс моргания глаза при открытии страницы / раздела
-// ========================================
-
-(() => {
-  const blinkChance = 0.35; // 35% шанс моргания при каждом открытии страницы
-  const frameDelay = 70;
-  const startDelay = 450;
-
-  const frames = [
-    "/images/ui/bookmark-eye-4.png", // открытый
-    "/images/ui/bookmark-eye-3.png",
-    "/images/ui/bookmark-eye-2.png",
-    "/images/ui/bookmark-eye-1.png", // закрытый
-    "/images/ui/bookmark-eye-2.png",
-    "/images/ui/bookmark-eye-3.png",
-    "/images/ui/bookmark-eye-4.png"  // снова открытый
-  ];
-
-  function preloadFrames() {
-    frames.forEach((src) => {
-      const image = new Image();
-      image.src = src;
-    });
-  }
-
-  function playBlink(eye) {
-    let frameIndex = 0;
-
-    const blinkInterval = setInterval(() => {
-      eye.src = frames[frameIndex];
-      frameIndex += 1;
-
-      if (frameIndex >= frames.length) {
-        clearInterval(blinkInterval);
-        eye.src = frames[0];
-      }
-    }, frameDelay);
-  }
-
   function tryBlinkOnPageOpen() {
-    const eyes = document.querySelectorAll(".bookmark-eye");
-
-    if (eyes.length === 0) return;
-
+    const blinkChance = 0.35;
     const shouldBlink = Math.random() < blinkChance;
 
     if (!shouldBlink) return;
 
     setTimeout(() => {
-      eyes.forEach(playBlink);
-    }, startDelay);
+      eyes.forEach(blink);
+    }, 450);
   }
 
   preloadFrames();
 
-  // Обычное открытие страницы
+  eyes.forEach((eye) => {
+    eye.src = openEye;
+    scheduleRandomBlink(eye);
+  });
+
   window.addEventListener("DOMContentLoaded", tryBlinkOnPageOpen);
 
-  // Возврат назад/вперёд в браузере, когда страница берётся из кэша
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
       tryBlinkOnPageOpen();
     }
   });
 })();
+
+
 // ========================================
-// Мобильные карточки:
-// 1 тап — раскрыть карточку
-// 2 тап — открыть ссылку
+// 5. Карточки
+// ПК: клик открывает ссылку.
+// Телефон: 1 тап раскрывает, 2 тап открывает ссылку.
 // ========================================
 
 (() => {
   const cards = document.querySelectorAll(".link-card");
 
+  if (cards.length === 0) return;
+
   const isMobileLike = window.matchMedia(
     "(hover: none), (pointer: coarse), (max-width: 700px)"
   ).matches;
 
-  if (!isMobileLike || cards.length === 0) return;
+  function getCardUrl(card) {
+    const isAnchorCard = card.tagName.toLowerCase() === "a";
+    return isAnchorCard ? card.href : card.dataset.url;
+  }
+
+  function getCardTarget(card) {
+    const isAnchorCard = card.tagName.toLowerCase() === "a";
+    return isAnchorCard ? card.target : card.dataset.target;
+  }
+
+  function openCardUrl(card) {
+    const url = getCardUrl(card);
+    const target = getCardTarget(card) || "_self";
+
+    if (!url) return;
+
+    if (target === "_blank") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = url;
+    }
+  }
 
   function closeOtherCards(currentCard) {
     cards.forEach((card) => {
@@ -310,19 +288,34 @@ loadAlmanac();
   }
 
   cards.forEach((card) => {
+    const hasUrl = Boolean(getCardUrl(card));
+
     card.setAttribute("tabindex", "0");
     card.setAttribute("aria-expanded", "false");
+
+    if (hasUrl) {
+      card.setAttribute("role", "link");
+    }
 
     card.addEventListener(
       "click",
       (event) => {
-        const isOpen = card.classList.contains("is-open");
         const isAnchorCard = card.tagName.toLowerCase() === "a";
+        const isOpen = card.classList.contains("is-open");
 
-        const url = isAnchorCard ? card.href : card.dataset.url;
-        const target = isAnchorCard ? card.target : card.dataset.target;
+        // ПК:
+        // Если карточка всё ещё <a>, браузер сам откроет ссылку.
+        // Если карточка <article data-url>, открываем ссылку вручную.
+        if (!isMobileLike) {
+          if (!isAnchorCard && hasUrl) {
+            openCardUrl(card);
+          }
 
-        // Первый тап: ВСЕГДА запрещаем переход и только раскрываем карточку.
+          return;
+        }
+
+        // Телефон:
+        // Первый тап всегда только раскрывает карточку.
         if (!isOpen) {
           event.preventDefault();
           event.stopPropagation();
@@ -335,28 +328,33 @@ loadAlmanac();
           return;
         }
 
-        // Второй тап: если ссылки нет, просто ничего не открываем.
-        if (!url) {
-          event.preventDefault();
-          event.stopPropagation();
-          return;
-        }
-
-        // Второй тап: открываем ссылку сами.
+        // Телефон:
+        // Второй тап открывает ссылку, если она есть.
         event.preventDefault();
         event.stopPropagation();
 
-        if (target === "_blank") {
-          window.open(url, "_blank", "noopener,noreferrer");
-        } else {
-          window.location.href = url;
+        if (hasUrl) {
+          openCardUrl(card);
         }
       },
       true
     );
+
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+
+      event.preventDefault();
+
+      if (isMobileLike) {
+        card.click();
+      } else if (hasUrl) {
+        openCardUrl(card);
+      }
+    });
   });
 
   document.addEventListener("click", (event) => {
+    if (!isMobileLike) return;
     if (event.target.closest(".link-card")) return;
 
     cards.forEach((card) => {
