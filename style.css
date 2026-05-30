@@ -1107,3 +1107,116 @@ h3 {
   line-height: 1.7;
   color: var(--text-soft);
 }
+/* =========================
+   Project categories
+========================= */
+
+.project-category {
+  margin-top: 56px;
+}
+
+.project-category:first-of-type {
+  margin-top: 0;
+}
+
+.category-head {
+  margin-bottom: 22px;
+}
+
+.category-head h3 {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: clamp(28px, 3vw, 38px);
+  letter-spacing: 0.03em;
+
+  text-shadow:
+    0 0 10px rgba(89, 255, 244, 0.28),
+    0 0 24px rgba(125, 48, 255, 0.28);
+}
+
+.category-head p:not(.section-kicker) {
+  max-width: 700px;
+  margin: 10px 0 0;
+
+  color: var(--text-soft);
+
+  font-family: var(--font-archive);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* Архивные карточки чуть холоднее и тусклее */
+.archived-card .link-card-image {
+  filter:
+    grayscale(0.55)
+    brightness(0.64)
+    saturate(0.72)
+    contrast(1.05);
+}
+
+.archived-card:hover .link-card-image {
+  filter:
+    grayscale(0.35)
+    brightness(0.5)
+    saturate(0.85)
+    contrast(1.08);
+}
+
+.archived-card {
+  border-color: rgba(160, 130, 210, 0.36);
+}
+
+.archived-card .project-label {
+  color: #cdb8ff;
+  border-color: rgba(205, 184, 255, 0.35);
+  background: rgba(40, 20, 70, 0.72);
+}
+/* =========================
+   Mobile card tap reveal
+   Телефон: первый тап открывает текст, второй тап открывает ссылку
+========================= */
+
+.link-card[data-url],
+a.link-card {
+  cursor: pointer;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .link-card .link-card-content {
+    transform: translateY(calc(100% - 112px));
+  }
+
+  .link-card p:not(.project-label) {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .link-card.is-open .link-card-content {
+    transform: translateY(0);
+  }
+
+  .link-card.is-open .link-card-image {
+    transform: scale(1.1);
+
+    filter:
+      brightness(0.48)
+      saturate(1.16)
+      contrast(1.08);
+  }
+
+  .link-card.is-open p:not(.project-label) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .link-card.is-open {
+    border-color: rgba(89, 255, 244, 0.9);
+
+    box-shadow:
+      0 24px 64px rgba(0, 0, 0, 0.46),
+      0 0 36px rgba(89, 255, 244, 0.28),
+      0 0 50px rgba(126, 53, 255, 0.22);
+  }
+}

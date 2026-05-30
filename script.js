@@ -285,3 +285,58 @@ loadAlmanac();
     }
   });
 })();
+// ========================================
+// Карточки на телефоне:
+// первый тап раскрывает, второй открывает ссылку
+// ========================================
+
+(() => {
+  const cards = document.querySelectorAll(".link-card");
+  const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+
+  if (!isTouchDevice || cards.length === 0) return;
+
+  cards.forEach((card) => {
+    card.setAttribute("tabindex", "0");
+
+    card.addEventListener("click", (event) => {
+      const clickedRealLink = event.target.closest("a");
+
+      if (clickedRealLink) return;
+
+      const url = card.dataset.url;
+      const target = card.dataset.target || "_self";
+      const isOpen = card.classList.contains("is-open");
+
+      cards.forEach((otherCard) => {
+        if (otherCard !== card) {
+          otherCard.classList.remove("is-open");
+          otherCard.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      if (!isOpen) {
+        card.classList.add("is-open");
+        card.setAttribute("aria-expanded", "true");
+        return;
+      }
+
+      if (url) {
+        if (target === "_blank") {
+          window.open(url, "_blank", "noopener,noreferrer");
+        } else {
+          window.location.href = url;
+        }
+      }
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".link-card")) return;
+
+    cards.forEach((card) => {
+      card.classList.remove("is-open");
+      card.setAttribute("aria-expanded", "false");
+    });
+  });
+})();
