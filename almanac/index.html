@@ -10,28 +10,45 @@
 </head>
 <body>
 <header class="site-header">
-  <a href="./" class="site-logo">Bregantazy.art</a>
+  <a href="../" class="site-logo">Bregantazy</a>
 
   <nav class="site-nav" aria-label="Главная навигация">
-    <a href="./" class="nav-link" data-page="home">Главная</a>
-    <a href="links/" class="nav-link" data-page="links">Ссылки</a>
-    <a href="thanks/" class="nav-link" data-page="thanks">Спасибо за покупку</a>
+    <a href="../" class="nav-link" data-page="home">Главная</a>
+    <a href="../links/" class="nav-link" data-page="links">Проекты</a>
+    <a href="../almanac/" class="nav-link" data-page="almanac">Альманах</a>
+    <a href="../thanks/" class="nav-link" data-page="thanks">Спасибо</a>
   </nav>
 </header>
 
-  <main class="page">
-    <section class="hero small-hero">
-      <div class="hero-content">
-        <p class="eyebrow">Архив вселенной</p>
+<main class="page">
+  <section class="hero">
+  <div class="archive-text">
+    <p class="eyebrow">Архив вселенной</p>
 
-        <h1>Альманах</h1>
+    <h1>Альманах</h1>
 
-        <p class="subtitle">
-          Персонажи, сущности, проекты, миры и странные записи Bregantazy.
-          Пока это первая полка архива, но она уже открыта.
-        </p>
-      </div>
-    </section>
+    <p class="subtitle">
+      Персонажи, сущности, проекты, миры и странные записи Bregantazy.
+      Пока это первая полка архива, но она уже открыта.
+    </p>
+  </div>
+
+  <div class="hero-bookmark">
+    <span>Раздел</span>
+
+    <div class="bookmark-line"></div>
+
+    <strong>Альманах</strong>
+
+    <div class="bookmark-eye-mask" aria-hidden="true">
+      <img
+        src="/images/ui/bookmark-eye-4.png"
+        alt=""
+        class="bookmark-eye"
+      />
+    </div>
+  </div>
+</section>
 
     <section class="almanac-section">
       <div class="section-head">
@@ -50,7 +67,7 @@
         />
       </div>
 
-      <div class="almanac-grid" id="characterGrid"></div>
+      <div class="almanac-groups" id="almanacGrid"></div>
     </section>
   </main>
 

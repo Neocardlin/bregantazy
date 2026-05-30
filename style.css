@@ -1220,3 +1220,911 @@ a.link-card {
       0 0 50px rgba(126, 53, 255, 0.22) !important;
   }
 }
+/* =========================
+   Almanac portrait cards
+========================= */
+
+.almanac-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.almanac-portrait {
+  position: relative;
+
+  height: 210px;
+  margin: -24px -24px 22px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid rgba(89, 255, 244, 0.24);
+
+  background:
+    radial-gradient(circle at center, rgba(89, 255, 244, 0.12), transparent 55%),
+    rgba(8, 0, 20, 0.72);
+}
+
+.almanac-portrait img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter:
+    brightness(0.84)
+    saturate(1.08)
+    contrast(1.05);
+
+  transform: scale(1.02);
+
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.almanac-card:hover .almanac-portrait img {
+  transform: scale(1.08);
+
+  filter:
+    brightness(0.68)
+    saturate(1.16)
+    contrast(1.08);
+}
+
+.almanac-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin: 0 0 14px;
+}
+
+.almanac-meta span {
+  padding: 6px 9px;
+
+  border: 1px solid rgba(89, 255, 244, 0.28);
+  border-radius: 999px;
+
+  background: rgba(89, 255, 244, 0.08);
+  color: var(--text-soft);
+
+  font-family: var(--font-archive);
+  font-size: 12px;
+}
+/* =========================
+   Clickable Almanac cards
+========================= */
+
+.almanac-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.almanac-card-link::after {
+  content: "Открыть досье →";
+
+  display: inline-flex;
+
+  margin-top: 18px;
+
+  color: var(--color-accent);
+
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 900;
+
+  text-shadow: 0 0 10px rgba(89, 255, 244, 0.65);
+}
+
+/* =========================
+   Dossier page
+========================= */
+
+.dossier-page {
+  width: min(100%, 1180px);
+  margin: clamp(32px, 5vw, 56px) auto 0;
+}
+
+.dossier-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.dossier-sidebar,
+.dossier-panel {
+  border: 1px solid rgba(89, 255, 244, 0.22);
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30, 0, 75, 0.72),
+      rgba(6, 22, 37, 0.48)
+    );
+
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.22),
+    inset 0 0 28px rgba(255, 255, 255, 0.035);
+}
+
+.dossier-sidebar {
+  overflow: hidden;
+}
+
+.dossier-portrait {
+  height: 360px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid rgba(89, 255, 244, 0.24);
+
+  background:
+    radial-gradient(circle at center, rgba(89, 255, 244, 0.12), transparent 55%),
+    rgba(8, 0, 20, 0.72);
+}
+
+.dossier-portrait img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.dossier-facts {
+  padding: 24px;
+}
+
+.dossier-facts h2 {
+  margin-bottom: 18px;
+  font-size: 28px;
+}
+
+.dossier-facts dl {
+  margin: 0;
+
+  display: grid;
+  gap: 14px;
+}
+
+.dossier-facts div {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(89, 255, 244, 0.14);
+}
+
+.dossier-facts dt {
+  margin-bottom: 4px;
+
+  color: var(--color-accent);
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dossier-facts dd {
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-family: var(--font-archive);
+  line-height: 1.45;
+}
+
+.dossier-content {
+  display: grid;
+  gap: 24px;
+}
+
+.dossier-panel {
+  padding: 28px;
+}
+
+.dossier-panel h2 {
+  margin-bottom: 16px;
+}
+
+.dossier-panel p {
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-family: var(--font-archive);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.dossier-panel p + p {
+  margin-top: 16px;
+}
+
+.dossier-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  margin-top: 22px;
+}
+
+.dossier-list div {
+  padding: 18px;
+
+  border: 1px solid rgba(89, 255, 244, 0.18);
+  border-radius: 20px;
+
+  background: rgba(8, 0, 20, 0.42);
+}
+
+.dossier-list strong {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.dossier-list p {
+  font-size: 14px;
+}
+
+.spoiler-panel {
+  border-color: rgba(255, 211, 106, 0.26);
+}
+
+.dossier-back {
+  margin-top: 24px;
+}
+
+@media (max-width: 800px) {
+  .dossier-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dossier-portrait {
+    height: 320px;
+  }
+
+  .dossier-list {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   Scroll-rise fixed character
+   Цербелла вылезает из нижнего края экрана у конца страницы
+========================= */
+
+.dossier-character-floor {
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: visible !important;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.dossier-character-art {
+  position: fixed !important;
+
+  right: 28px !important;
+  bottom: -34px !important;
+  z-index: 999 !important;
+
+  width: 430px;
+
+  opacity: 0;
+  transform: translateY(115%);
+
+  will-change: transform, opacity;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.dossier-character-art img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  filter:
+    drop-shadow(0 0 16px rgba(89, 255, 244, 0.1))
+    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.42));
+
+  animation: dossierCharacterFloat 5.5s ease-in-out infinite;
+}
+
+@keyframes dossierCharacterFloat {
+  0% {
+    transform: translateY(0) rotate(-0.3deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0.25deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.3deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .dossier-character-art {
+    width: 370px;
+    right: 18px !important;
+    bottom: -28px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: none;
+  }
+}
+/* =========================
+   Cerbella layered art
+   Многослойная Цербелла
+========================= */
+
+.cerbella-layered {
+  aspect-ratio: 1 / 1.25;
+}
+
+.cerbella-layer {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.cerbella-body {
+  z-index: 1;
+}
+
+.cerbella-skirt {
+  z-index: 2;
+  transform-origin: 52% 76%;
+  animation: cerbellaSkirtFloat 5.8s ease-in-out infinite;
+}
+
+.cerbella-cookie-jar {
+  z-index: 3;
+  transform-origin: 42% 70%;
+  animation: cerbellaJarFloat 4.8s ease-in-out infinite;
+}
+
+.cerbella-head {
+  z-index: 4;
+  transform-origin: 52% 36%;
+  animation: cerbellaHeadFloat 5.5s ease-in-out infinite;
+}
+
+.cerbella-bow-hair {
+  z-index: 5;
+  transform-origin: 58% 32%;
+  animation: cerbellaBowHairFloat 4.6s ease-in-out infinite;
+}
+
+/* лёгкое дыхание головы */
+@keyframes cerbellaHeadFloat {
+  0% {
+    transform: translateY(0) rotate(-0.25deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(0.25deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.25deg);
+  }
+}
+
+/* волосы и бант чуть живее */
+@keyframes cerbellaBowHairFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(0.7deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* юбка мягко отстаёт */
+@keyframes cerbellaSkirtFloat {
+  0% {
+    transform: translateY(0) rotate(0.15deg);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(-0.25deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0.15deg);
+  }
+}
+
+/* банка чуть качается отдельно */
+@keyframes cerbellaJarFloat {
+  0% {
+    transform: translateY(0) rotate(-0.35deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(0.45deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.35deg);
+  }
+}
+
+/* Движение всей Цербеллы целиком, чтобы слои не разъезжались */
+@keyframes cerbellaWholeFloat {
+  0% {
+    transform: translateY(0) rotate(-0.3deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0.25deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.3deg);
+  }
+}
+
+/* Пока отключаем отдельные движения слоёв, чтобы собрать персонажа ровно */
+.cerbella-head,
+.cerbella-bow-hair,
+.cerbella-skirt,
+.cerbella-cookie-jar {
+  animation: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 1200px) {
+  .dossier-character-art {
+    width: 370px;
+    height: 482px;
+
+    right: 18px !important;
+    bottom: -28px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: none;
+  }
+}
+/* =========================
+   Cerbella fixed scroll-rise + snake inertia
+========================= */
+
+.dossier-character-floor {
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: visible !important;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.dossier-character-art {
+  position: fixed !important;
+
+  right: 28px !important;
+  bottom: -34px !important;
+  z-index: 999 !important;
+
+  width: 430px;
+  height: 430px;
+
+  opacity: 0;
+  transform: translateY(115%);
+
+  will-change: transform, opacity;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.cerbella-motion {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  transform: none;
+  will-change: transform;
+}
+
+.cerbella-stack {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  filter:
+    drop-shadow(0 0 16px rgba(89, 255, 244, 0.1))
+    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.42));
+
+  animation: cerbellaWholeBreath 6s ease-in-out infinite;
+}
+
+.dossier-character-art .cerbella-layer {
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: contain !important;
+  object-position: center bottom !important;
+
+  max-width: none !important;
+
+  filter: none !important;
+  animation: none !important;
+
+  pointer-events: none;
+  user-select: none;
+
+  will-change: transform;
+}
+
+/* Твой порядок слоёв */
+.cerbella-head {
+  z-index: 5;
+}
+
+.cerbella-body {
+  z-index: 4;
+}
+
+.cerbella-skirt {
+  z-index: 3;
+}
+
+.cerbella-cookie-jar {
+  z-index: 2;
+}
+
+.cerbella-bow-hair {
+  z-index: 1;
+}
+
+/* Лёгкое дыхание всей куклы */
+@keyframes cerbellaWholeBreath {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Змеиная логика слоёв */
+.cerbella-head {
+  transform:
+    translate3d(
+      calc(var(--snake-head-x, 0) * 1px),
+      calc(var(--snake-head-y, 0) * 1px),
+      0
+    )
+    rotate(calc(var(--snake-head-rotate, 0) * 1deg)) !important;
+
+  transform-origin: 52% 38%;
+}
+
+.cerbella-body {
+  transform:
+    translate3d(
+      calc(var(--snake-body-x, 0) * 1px),
+      calc(var(--snake-body-y, 0) * 1px),
+      0
+    )
+    rotate(calc(var(--snake-body-rotate, 0) * 1deg)) !important;
+
+  transform-origin: 50% 70%;
+}
+
+.cerbella-skirt {
+  transform:
+    translate3d(
+      calc(var(--snake-skirt-x, 0) * 1px),
+      calc(var(--snake-skirt-y, 0) * 1px),
+      0
+    )
+    rotate(calc(var(--snake-skirt-rotate, 0) * 1deg)) !important;
+
+  transform-origin: 50% 82%;
+}
+
+.cerbella-cookie-jar {
+  transform:
+    translate3d(
+      calc(var(--snake-jar-x, 0) * 1px),
+      calc(var(--snake-jar-y, 0) * 1px),
+      0
+    )
+    rotate(calc(var(--snake-jar-rotate, 0) * 1deg)) !important;
+
+  transform-origin: 42% 70%;
+}
+
+.cerbella-bow-hair {
+  transform:
+    translate3d(
+      calc(var(--snake-bow-x, 0) * 1px),
+      calc(var(--snake-bow-y, 0) * 1px),
+      0
+    )
+    rotate(calc(var(--snake-bow-rotate, 0) * 1deg)) !important;
+
+  transform-origin: 58% 32%;
+}
+
+@media (max-width: 1200px) {
+  .dossier-character-art {
+    width: 370px;
+    height: 370px;
+
+    right: 18px !important;
+    bottom: -28px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: none !important;
+  }
+}
+/* =========================
+   Cerbella final size override
+   Увеличиваем нижнюю Цербеллу
+========================= */
+
+.dossier-character-art {
+  width: 520px !important;
+  height: 520px !important;
+
+  right: 18px !important;
+  bottom: -46px !important;
+}
+
+@media (max-width: 1200px) {
+  .dossier-character-art {
+    width: 460px !important;
+    height: 460px !important;
+
+    right: 10px !important;
+    bottom: -42px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: none !important;
+  }
+}
+/* =========================
+   Cerbella mobile version
+   На телефоне нет мышки, поэтому остаются скролл, моргание и тап
+========================= */
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: block !important;
+
+    right: -18px !important;
+    bottom: -28px !important;
+
+    width: min(62vw, 260px);
+    height: min(62vw, 260px);
+
+    pointer-events: auto;
+  }
+
+  .cerbella-motion {
+    pointer-events: auto;
+  }
+
+  .cerbella-stack {
+    animation: cerbellaMobileIdle 4.8s ease-in-out infinite;
+  }
+
+  .dossier-character-art .cerbella-layer {
+    transform: none !important;
+  }
+}
+
+@keyframes cerbellaMobileIdle {
+  0% {
+    transform: translateY(0) rotate(-0.2deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(0.25deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.2deg);
+  }
+}
+/* =========================
+   Cerbella mobile tap figure-eight
+========================= */
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: block !important;
+
+    right: -12px !important;
+    bottom: -28px !important;
+
+    width: 300px !important;
+    height: 300px !important;
+
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-floor,
+  .cerbella-motion,
+  .cerbella-stack {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art .cerbella-layer {
+    transform: none !important;
+  }
+
+  .cerbella-stack {
+    animation: cerbellaMobileIdle 5s ease-in-out infinite;
+  }
+}
+
+@keyframes cerbellaMobileIdle {
+  0% {
+    transform: translateY(0) rotate(-0.2deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(0.2deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(-0.2deg);
+  }
+}
+@media (max-width: 800px) {
+  .cerbella-motion.is-figure-eight {
+    animation: cerbellaFigureEight 0.9s ease-in-out;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-bow-hair {
+    animation: cerbellaFigureEightBow 0.9s ease-in-out;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-skirt {
+    animation: cerbellaFigureEightSkirt 0.9s ease-in-out;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-cookie-jar {
+    animation: cerbellaFigureEightJar 0.9s ease-in-out;
+  }
+}
+
+@keyframes cerbellaFigureEight {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(-10px, -8px) rotate(-2.5deg);
+  }
+
+  40% {
+    transform: translate(10px, 4px) rotate(2deg);
+  }
+
+  60% {
+    transform: translate(-8px, 7px) rotate(-1.6deg);
+  }
+
+  80% {
+    transform: translate(7px, -4px) rotate(1.2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes cerbellaFigureEightBow {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  35% {
+    transform: translate(-8px, -10px) rotate(-4deg);
+  }
+
+  65% {
+    transform: translate(8px, 6px) rotate(3deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes cerbellaFigureEightSkirt {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  35% {
+    transform: translate(5px, 3px) rotate(2deg);
+  }
+
+  65% {
+    transform: translate(-5px, 4px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes cerbellaFigureEightJar {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  30% {
+    transform: translate(6px, 5px) rotate(4deg);
+  }
+
+  60% {
+    transform: translate(-5px, -3px) rotate(-3deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
