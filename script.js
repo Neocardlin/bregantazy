@@ -286,49 +286,74 @@ loadAlmanac();
   });
 })();
 // ========================================
-// Карточки на телефоне:
-// первый тап раскрывает, второй открывает ссылку
+// Мобильные карточки:
+// 1 тап — раскрыть карточку
+// 2 тап — открыть ссылку
 // ========================================
 
 (() => {
   const cards = document.querySelectorAll(".link-card");
-  const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
-  if (!isTouchDevice || cards.length === 0) return;
+  const isMobileLike = window.matchMedia(
+    "(hover: none), (pointer: coarse), (max-width: 700px)"
+  ).matches;
+
+  if (!isMobileLike || cards.length === 0) return;
+
+  function closeOtherCards(currentCard) {
+    cards.forEach((card) => {
+      if (card !== currentCard) {
+        card.classList.remove("is-open");
+        card.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
 
   cards.forEach((card) => {
     card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-expanded", "false");
 
-    card.addEventListener("click", (event) => {
-      const clickedRealLink = event.target.closest("a");
+    card.addEventListener(
+      "click",
+      (event) => {
+        const isOpen = card.classList.contains("is-open");
+        const isAnchorCard = card.tagName.toLowerCase() === "a";
 
-      if (clickedRealLink) return;
+        const url = isAnchorCard ? card.href : card.dataset.url;
+        const target = isAnchorCard ? card.target : card.dataset.target;
 
-      const url = card.dataset.url;
-      const target = card.dataset.target || "_self";
-      const isOpen = card.classList.contains("is-open");
+        // Первый тап: ВСЕГДА запрещаем переход и только раскрываем карточку.
+        if (!isOpen) {
+          event.preventDefault();
+          event.stopPropagation();
 
-      cards.forEach((otherCard) => {
-        if (otherCard !== card) {
-          otherCard.classList.remove("is-open");
-          otherCard.setAttribute("aria-expanded", "false");
+          closeOtherCards(card);
+
+          card.classList.add("is-open");
+          card.setAttribute("aria-expanded", "true");
+
+          return;
         }
-      });
 
-      if (!isOpen) {
-        card.classList.add("is-open");
-        card.setAttribute("aria-expanded", "true");
-        return;
-      }
+        // Второй тап: если ссылки нет, просто ничего не открываем.
+        if (!url) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
 
-      if (url) {
+        // Второй тап: открываем ссылку сами.
+        event.preventDefault();
+        event.stopPropagation();
+
         if (target === "_blank") {
           window.open(url, "_blank", "noopener,noreferrer");
         } else {
           window.location.href = url;
         }
-      }
-    });
+      },
+      true
+    );
   });
 
   document.addEventListener("click", (event) => {
