@@ -609,26 +609,60 @@ loadAlmanac();
   updateRiseStages();
 })();
 // ========================================
-// 8. Змеиная инерция Цербеллы от мышки
-// Голова ведёт, тело и юбка уходят в противофазу
+// 8. Персонаж: мышь + клик-восьмёрка
+// Мышь задаёт живую инерцию.
+// Клик/тап запускает движение, будто мышкой провели восьмёрку.
 // ========================================
 
 (() => {
-  const motionTargets = document.querySelectorAll("[data-character-inertia]");
+  const characterArts = Array.from(
+    document.querySelectorAll(".dossier-character-art")
+  ).filter((art) => art.querySelector("[data-character-inertia]"));
 
-  if (motionTargets.length === 0) return;
+  if (characterArts.length === 0) return;
 
   const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-  if (!canHover) return;
 
   function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
   }
 
-  const state = {
-    targetX: 0,
-    targetY: 0,
+  function approach(current, target, inertia) {
+    return current + (target - current) * inertia;
+  }
+
+  const settings = {
+    headPowerX: 7,
+    headPowerY: 3,
+
+    bodyPowerX: -3.5,
+    bodyPowerY: 1.2,
+
+    skirtPowerX: -8.5,
+    skirtPowerY: 2.4,
+
+    jarPowerX: -2.5,
+    jarPowerY: 1.1,
+
+    bowPowerX: 14,
+    bowPowerY: 5,
+
+    headInertia: 0.10,
+    bodyInertia: 0.045,
+    skirtInertia: 0.032,
+    jarInertia: 0.055,
+    bowInertia: 0.07
+  };
+
+  const states = characterArts.map((art) => ({
+    art,
+    motion: art.querySelector("[data-character-inertia]"),
+
+    realX: 0,
+    realY: 0,
+
+    gestureStart: 0,
+    gestureDuration: 980,
 
     headX: 0,
     headY: 0,
@@ -644,66 +678,88 @@ loadAlmanac();
 
     bowX: 0,
     bowY: 0
-  };
+  }));
 
-  const settings = {
-    headPowerX: 16,
-    headPowerY: 7,
+  function setRealTargetFromPointer(event) {
+    if (!canHover) return;
 
-    bodyPowerX: -10,
-    bodyPowerY: 3,
-
-    skirtPowerX: -15,
-    skirtPowerY: 4,
-
-    jarPowerX: -7,
-    jarPowerY: 3,
-
-    bowPowerX: 20,
-    bowPowerY: 8,
-
-    headInertia: 0.12,
-    bodyInertia: 0.055,
-    skirtInertia: 0.04,
-    jarInertia: 0.065,
-    bowInertia: 0.09
-  };
-
-  function setTargetsFromPointer(event) {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
 
     const normalizedX = clamp((event.clientX - centerX) / centerX, -1, 1);
     const normalizedY = clamp((event.clientY - centerY) / centerY, -1, 1);
 
-    state.targetX = normalizedX;
-    state.targetY = normalizedY;
+    states.forEach((state) => {
+      state.realX = normalizedX;
+      state.realY = normalizedY;
+    });
   }
 
-  function resetTargets() {
-    state.targetX = 0;
-    state.targetY = 0;
+  function resetRealTargets() {
+    states.forEach((state) => {
+      state.realX = 0;
+      state.realY = 0;
+    });
   }
 
-  function approach(current, target, inertia) {
-    return current + (target - current) * inertia;
+  function startFigureEight(state) {
+    state.gestureStart = performance.now();
   }
 
-  function animate() {
-    const headTargetX = state.targetX * settings.headPowerX;
-    const headTargetY = state.targetY * settings.headPowerY;
+  function getFigureEightTarget(state, now) {
+    if (!state.gestureStart) {
+      return {
+        x: state.realX,
+        y: state.realY
+      };
+    }
 
-    const bodyTargetX = state.targetX * settings.bodyPowerX;
-    const bodyTargetY = state.targetY * settings.bodyPowerY;
+    const elapsed = now - state.gestureStart;
+    const progress = clamp(elapsed / state.gestureDuration, 0, 1);
 
-    const skirtTargetX = state.targetX * settings.skirtPowerX;
-    const skirtTargetY = state.targetY * settings.skirtPowerY;
+    if (progress >= 1) {
+      state.gestureStart = 0;
 
-    const jarTargetX = state.targetX * settings.jarPowerX;
-    const jarTargetY = state.targetY * settings.jarPowerY;
+      return {
+        x: state.realX,
+        y: state.realY
+      };
+    }
 
-    const bowTargetX = state.targetX * settings.bowPowerX;
-    const bowTargetY = state.targetY * settings.bowPowerY;
+    /*
+      Восьмёрка:
+      x = sin(t)
+      y = sin(2t)
+
+      fade нужен, чтобы движение начиналось и заканчивалось мягко.
+    */
+    const angle = progress * Math.PI * 2;
+    const fade = Math.sin(progress * Math.PI);
+
+    const eightX = Math.sin(angle) * fade;
+    const eightY = Math.sin(angle * 2) * 0.55 * fade;
+
+    return {
+      x: eightX,
+      y: eightY
+    };
+  }
+
+  function applyCharacterMotion(state, normalizedX, normalizedY) {
+    const headTargetX = normalizedX * settings.headPowerX;
+    const headTargetY = normalizedY * settings.headPowerY;
+
+    const bodyTargetX = normalizedX * settings.bodyPowerX;
+    const bodyTargetY = normalizedY * settings.bodyPowerY;
+
+    const skirtTargetX = normalizedX * settings.skirtPowerX;
+    const skirtTargetY = normalizedY * settings.skirtPowerY;
+
+    const jarTargetX = normalizedX * settings.jarPowerX;
+    const jarTargetY = normalizedY * settings.jarPowerY;
+
+    const bowTargetX = normalizedX * settings.bowPowerX;
+    const bowTargetY = normalizedY * settings.bowPowerY;
 
     state.headX = approach(state.headX, headTargetX, settings.headInertia);
     state.headY = approach(state.headY, headTargetY, settings.headInertia);
@@ -720,83 +776,53 @@ loadAlmanac();
     state.bowX = approach(state.bowX, bowTargetX, settings.bowInertia);
     state.bowY = approach(state.bowY, bowTargetY, settings.bowInertia);
 
-    motionTargets.forEach((target) => {
-      target.style.setProperty("--snake-head-x", state.headX.toFixed(3));
-      target.style.setProperty("--snake-head-y", state.headY.toFixed(3));
-      target.style.setProperty("--snake-head-rotate", (state.headX * 0.0045).toFixed(3));
+    state.motion.style.setProperty("--snake-head-x", state.headX.toFixed(3));
+    state.motion.style.setProperty("--snake-head-y", state.headY.toFixed(3));
+    state.motion.style.setProperty("--snake-head-rotate", (state.headX * 0.045).toFixed(3));
 
-      target.style.setProperty("--snake-body-x", state.bodyX.toFixed(3));
-      target.style.setProperty("--snake-body-y", state.bodyY.toFixed(3));
-      target.style.setProperty("--snake-body-rotate", (state.bodyX * -0.025).toFixed(3));
+    state.motion.style.setProperty("--snake-body-x", state.bodyX.toFixed(3));
+    state.motion.style.setProperty("--snake-body-y", state.bodyY.toFixed(3));
+    state.motion.style.setProperty("--snake-body-rotate", (state.bodyX * -0.025).toFixed(3));
 
-      target.style.setProperty("--snake-skirt-x", state.skirtX.toFixed(3));
-      target.style.setProperty("--snake-skirt-y", state.skirtY.toFixed(3));
-      target.style.setProperty("--snake-skirt-rotate", (state.skirtX * -0.06).toFixed(3));
+    state.motion.style.setProperty("--snake-skirt-x", state.skirtX.toFixed(3));
+    state.motion.style.setProperty("--snake-skirt-y", state.skirtY.toFixed(3));
+    state.motion.style.setProperty("--snake-skirt-rotate", (state.skirtX * -0.06).toFixed(3));
 
-      target.style.setProperty("--snake-jar-x", state.jarX.toFixed(3));
-      target.style.setProperty("--snake-jar-y", state.jarY.toFixed(3));
-      target.style.setProperty("--snake-jar-rotate", (state.jarX * -0.04).toFixed(3));
+    state.motion.style.setProperty("--snake-jar-x", state.jarX.toFixed(3));
+    state.motion.style.setProperty("--snake-jar-y", state.jarY.toFixed(3));
+    state.motion.style.setProperty("--snake-jar-rotate", (state.jarX * -0.04).toFixed(3));
 
-      target.style.setProperty("--snake-bow-x", state.bowX.toFixed(3));
-      target.style.setProperty("--snake-bow-y", state.bowY.toFixed(3));
-      target.style.setProperty("--snake-bow-rotate", (state.bowX * 0.095).toFixed(3));
+    state.motion.style.setProperty("--snake-bow-x", state.bowX.toFixed(3));
+    state.motion.style.setProperty("--snake-bow-y", state.bowY.toFixed(3));
+    state.motion.style.setProperty("--snake-bow-rotate", (state.bowX * 0.095).toFixed(3));
+  }
+
+  function animate(now) {
+    states.forEach((state) => {
+      const target = getFigureEightTarget(state, now);
+      applyCharacterMotion(state, target.x, target.y);
     });
 
     requestAnimationFrame(animate);
   }
 
-  window.addEventListener("pointermove", setTargetsFromPointer, { passive: true });
-  window.addEventListener("pointerleave", resetTargets);
-  window.addEventListener("blur", resetTargets);
+  window.addEventListener("pointermove", setRealTargetFromPointer, {
+    passive: true
+  });
 
-  animate();
-})();
-// ========================================
-// 9. Телефонная анимация Цербеллы по тапу
-// На телефоне тап по видимой Цербелле запускает танец
-// ========================================
+  window.addEventListener("pointerleave", resetRealTargets);
+  window.addEventListener("blur", resetRealTargets);
 
-(() => {
-  const characterArts = document.querySelectorAll(".dossier-character-art");
-
-  if (characterArts.length === 0) return;
-
-  const isMobileLike = window.matchMedia(
-    "(hover: none), (pointer: coarse), (max-width: 800px)"
-  ).matches;
-
-  if (!isMobileLike) return;
-
-  function playTapDance(characterArt) {
-    const motion = characterArt.querySelector(".cerbella-motion");
-
-    if (!motion) return;
-
-    motion.classList.remove("is-figure-eight");
-
-    // Перезапуск CSS-анимации
-    void motion.offsetWidth;
-
-    motion.classList.add("is-figure-eight");
-
-    window.setTimeout(() => {
-      motion.classList.remove("is-figure-eight");
-    }, 950);
-  }
-
-  characterArts.forEach((characterArt) => {
-    characterArt.addEventListener("pointerdown", (event) => {
-      event.preventDefault();
-      playTapDance(characterArt);
-    });
-
-    characterArt.addEventListener(
-      "touchstart",
+  states.forEach((state) => {
+    state.art.addEventListener(
+      "pointerup",
       (event) => {
         event.preventDefault();
-        playTapDance(characterArt);
+        startFigureEight(state);
       },
       { passive: false }
     );
   });
+
+  requestAnimationFrame(animate);
 })();

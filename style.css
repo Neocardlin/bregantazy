@@ -2204,3 +2204,367 @@ a.link-card {
     pointer-events: none !important;
   }
 }
+/* =========================
+   Cerbella mobile tap dance FINAL FIX
+   Разрешаем слоям анимироваться при тапе
+========================= */
+
+@media (max-width: 800px) {
+  .dossier-character-floor {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art {
+    display: block !important;
+
+    right: -12px !important;
+    bottom: -28px !important;
+
+    width: 300px !important;
+    height: 300px !important;
+
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+
+  .cerbella-motion,
+  .cerbella-stack {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art .cerbella-layer {
+    pointer-events: none !important;
+  }
+
+  /* В спокойном состоянии слои стоят ровно */
+  .cerbella-motion:not(.is-figure-eight) .cerbella-layer {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* В момент тапа разрешаем конкретные анимации */
+  .cerbella-motion.is-figure-eight .cerbella-head {
+    animation: cerbellaTapDanceHead 0.82s ease-in-out !important;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-body {
+    animation: cerbellaTapDanceBody 0.82s ease-in-out !important;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-skirt {
+    animation: cerbellaTapDanceSkirt 0.82s ease-in-out !important;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-cookie-jar {
+    animation: cerbellaTapDanceJar 0.82s ease-in-out !important;
+  }
+
+  .cerbella-motion.is-figure-eight .cerbella-bow-hair {
+    animation: cerbellaTapDanceBow 0.82s ease-in-out !important;
+  }
+}
+
+/* =========================
+   Lari layered dossier art
+========================= */
+
+.lari-art {
+  width: 520px !important;
+  height: 520px !important;
+
+  right: 18px !important;
+  bottom: -46px !important;
+}
+
+.lari-motion,
+.lari-stack {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+.lari-stack {
+  filter:
+    drop-shadow(0 0 16px rgba(89, 255, 244, 0.1))
+    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.42));
+}
+
+.dossier-character-art .lari-layer {
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: contain !important;
+  object-position: center bottom !important;
+
+  max-width: none !important;
+
+  filter: none !important;
+  animation: none !important;
+
+  pointer-events: none;
+  user-select: none;
+
+  will-change: transform;
+}
+
+/* Порядок слоёв Лари */
+.lari-legs {
+  z-index: 2;
+}
+
+.lari-body {
+  z-index: 3;
+}
+
+.lari-body-2 {
+  z-index: 2;
+}
+
+.lari-hand {
+  z-index: 6;
+}
+
+.lari-hand-2 {
+  z-index: 1;
+}
+
+.lari-head {
+  z-index: 5;
+}
+
+/* ПК: мягкая змейка по тем же переменным, что у Цербеллы */
+.lari-head {
+  transform:
+    translate3d(
+      calc(var(--snake-head-x, 0) * 0.75px),
+      calc(var(--snake-head-y, 0) * 0.55px),
+      0
+    )
+    rotate(calc(var(--snake-head-rotate, 0) * 0.8deg)) !important;
+
+  transform-origin: 50% 34%;
+}
+
+.lari-body {
+  transform:
+    translate3d(
+      calc(var(--snake-body-x, 0) * 0.45px),
+      calc(var(--snake-body-y, 0) * 0.35px),
+      0
+    )
+    rotate(calc(var(--snake-body-rotate, 0) * 0.65deg)) !important;
+
+  transform-origin: 50% 68%;
+}
+
+.lari-body-2 {
+  transform:
+    translate3d(
+      calc(var(--snake-skirt-x, 0) * 0.35px),
+      calc(var(--snake-skirt-y, 0) * 0.25px),
+      0
+    )
+    rotate(calc(var(--snake-skirt-rotate, 0) * 0.55deg)) !important;
+
+  transform-origin: 50% 70%;
+}
+
+.lari-hand {
+  transform:
+    translate3d(
+      calc(var(--snake-bow-x, 0) * 0.55px),
+      calc(var(--snake-bow-y, 0) * 0.4px),
+      0
+    )
+    rotate(calc(var(--snake-bow-rotate, 0) * 0.75deg)) !important;
+
+  transform-origin: 45% 58%;
+}
+
+.lari-hand-2 {
+  transform:
+    translate3d(
+      calc(var(--snake-jar-x, 0) * 0.5px),
+      calc(var(--snake-jar-y, 0) * 0.35px),
+      0
+    )
+    rotate(calc(var(--snake-jar-rotate, 0) * 0.7deg)) !important;
+
+  transform-origin: 56% 58%;
+}
+
+.lari-legs {
+  transform:
+    translate3d(
+      calc(var(--snake-skirt-x, 0) * 0.18px),
+      calc(var(--snake-skirt-y, 0) * 0.14px),
+      0
+    )
+    rotate(calc(var(--snake-skirt-rotate, 0) * 0.35deg)) !important;
+
+  transform-origin: 50% 86%;
+}
+
+@media (max-width: 1200px) {
+  .lari-art {
+    width: 460px !important;
+    height: 460px !important;
+
+    right: 10px !important;
+    bottom: -42px !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .lari-art {
+    display: block !important;
+
+    right: -12px !important;
+    bottom: -28px !important;
+
+    width: 300px !important;
+    height: 300px !important;
+
+    pointer-events: auto !important;
+  }
+
+  .lari-motion,
+  .lari-stack {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art .lari-layer {
+    transform: none !important;
+  }
+}
+/* =========================
+   Lari motion tuning
+   Лари: спокойная голова, стабильное тело, выразительная передняя рука
+========================= */
+
+/* Лари не должен "змеиться" всем телом */
+.lari-head {
+  transform:
+    translate3d(
+      calc(var(--snake-head-x, 0) * 0.22px),
+      calc(var(--snake-head-y, 0) * 0.18px),
+      0
+    )
+    rotate(calc(var(--snake-head-rotate, 0) * 0.28deg)) !important;
+
+  transform-origin: 50% 36%;
+}
+
+/* Тело почти якорь, чтобы шея не отрывалась от головы */
+.lari-body {
+  transform:
+    translate3d(
+      calc(var(--snake-head-x, 0) * 0.08px),
+      calc(var(--snake-head-y, 0) * 0.06px),
+      0
+    )
+    rotate(calc(var(--snake-head-rotate, 0) * 0.12deg)) !important;
+
+  transform-origin: 50% 70%;
+}
+
+/* Второй слой тела двигается ещё меньше */
+.lari-body-2 {
+  transform:
+    translate3d(
+      calc(var(--snake-head-x, 0) * 0.05px),
+      calc(var(--snake-head-y, 0) * 0.04px),
+      0
+    )
+    rotate(calc(var(--snake-head-rotate, 0) * 0.08deg)) !important;
+
+  transform-origin: 50% 70%;
+}
+
+/* Передняя рука: оставляем выразительной */
+.lari-hand {
+  transform:
+    translate3d(
+      calc(var(--snake-bow-x, 0) * 0.62px),
+      calc(var(--snake-bow-y, 0) * 0.34px),
+      0
+    )
+    rotate(calc(var(--snake-bow-rotate, 0) * 0.95deg)) !important;
+
+  transform-origin: 45% 60%;
+}
+
+/* Вторая рука спокойнее, чтобы не ломала силуэт */
+.lari-hand-2 {
+  transform:
+    translate3d(
+      calc(var(--snake-jar-x, 0) * 0.22px),
+      calc(var(--snake-jar-y, 0) * 0.16px),
+      0
+    )
+    rotate(calc(var(--snake-jar-rotate, 0) * 0.35deg)) !important;
+
+  transform-origin: 56% 60%;
+}
+
+/* Ноги почти неподвижны, это опора */
+.lari-legs {
+  transform:
+    translate3d(
+      calc(var(--snake-skirt-x, 0) * 0.04px),
+      calc(var(--snake-skirt-y, 0) * 0.03px),
+      0
+    )
+    rotate(calc(var(--snake-skirt-rotate, 0) * 0.06deg)) !important;
+
+  transform-origin: 50% 88%;
+}
+/* =========================
+   Character click hitbox + figure-eight variable motion
+   Финальная страховка для клика/тапа по персонажу
+========================= */
+
+.dossier-character-art {
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+.cerbella-motion,
+.lari-motion {
+  pointer-events: auto !important;
+}
+
+.dossier-character-art .cerbella-layer,
+.dossier-character-art .lari-layer {
+  pointer-events: none !important;
+}
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: block !important;
+    pointer-events: auto !important;
+  }
+
+  .cerbella-motion,
+  .lari-motion,
+  .cerbella-stack,
+  .lari-stack {
+    pointer-events: auto !important;
+  }
+
+  /*
+    Важно:
+    на телефоне не запрещаем transform,
+    потому что теперь тап-восьмёрка тоже работает через CSS-переменные.
+  */
+  .dossier-character-art .cerbella-layer,
+  .dossier-character-art .lari-layer {
+    animation: none !important;
+  }
+}
