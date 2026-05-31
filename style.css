@@ -2568,3 +2568,142 @@ a.link-card {
     animation: none !important;
   }
 }
+/* =========================
+   Mobile character variable motion fix
+   На телефоне разрешаем восьмёрку через CSS-переменные
+========================= */
+
+@media (max-width: 800px) {
+  .dossier-character-art {
+    display: block !important;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+
+  .cerbella-motion,
+  .lari-motion,
+  .cerbella-stack,
+  .lari-stack {
+    pointer-events: auto !important;
+  }
+
+  .dossier-character-art .cerbella-layer,
+  .dossier-character-art .lari-layer {
+    pointer-events: none !important;
+    animation: none !important;
+  }
+
+  /* ===== Цербелла: мобильная восьмёрка через переменные ===== */
+
+  .dossier-character-art .cerbella-head {
+    transform:
+      translate3d(
+        calc(var(--snake-head-x, 0) * 1px),
+        calc(var(--snake-head-y, 0) * 1px),
+        0
+      )
+      rotate(calc(var(--snake-head-rotate, 0) * 1deg)) !important;
+  }
+
+  .dossier-character-art .cerbella-body {
+    transform:
+      translate3d(
+        calc(var(--snake-body-x, 0) * 1px),
+        calc(var(--snake-body-y, 0) * 1px),
+        0
+      )
+      rotate(calc(var(--snake-body-rotate, 0) * 1deg)) !important;
+  }
+
+  .dossier-character-art .cerbella-skirt {
+    transform:
+      translate3d(
+        calc(var(--snake-skirt-x, 0) * 1px),
+        calc(var(--snake-skirt-y, 0) * 1px),
+        0
+      )
+      rotate(calc(var(--snake-skirt-rotate, 0) * 1deg)) !important;
+  }
+
+  .dossier-character-art .cerbella-cookie-jar {
+    transform:
+      translate3d(
+        calc(var(--snake-jar-x, 0) * 1px),
+        calc(var(--snake-jar-y, 0) * 1px),
+        0
+      )
+      rotate(calc(var(--snake-jar-rotate, 0) * 1deg)) !important;
+  }
+
+  .dossier-character-art .cerbella-bow-hair {
+    transform:
+      translate3d(
+        calc(var(--snake-bow-x, 0) * 1px),
+        calc(var(--snake-bow-y, 0) * 1px),
+        0
+      )
+      rotate(calc(var(--snake-bow-rotate, 0) * 1deg)) !important;
+  }
+
+  /* ===== Лари: спокойная голова, выразительная рука ===== */
+
+  .dossier-character-art .lari-head {
+    transform:
+      translate3d(
+        calc(var(--snake-head-x, 0) * 0.22px),
+        calc(var(--snake-head-y, 0) * 0.18px),
+        0
+      )
+      rotate(calc(var(--snake-head-rotate, 0) * 0.28deg)) !important;
+  }
+
+  .dossier-character-art .lari-body {
+    transform:
+      translate3d(
+        calc(var(--snake-head-x, 0) * 0.08px),
+        calc(var(--snake-head-y, 0) * 0.06px),
+        0
+      )
+      rotate(calc(var(--snake-head-rotate, 0) * 0.12deg)) !important;
+  }
+
+  .dossier-character-art .lari-body-2 {
+    transform:
+      translate3d(
+        calc(var(--snake-head-x, 0) * 0.05px),
+        calc(var(--snake-head-y, 0) * 0.04px),
+        0
+      )
+      rotate(calc(var(--snake-head-rotate, 0) * 0.08deg)) !important;
+  }
+
+  .dossier-character-art .lari-hand {
+    transform:
+      translate3d(
+        calc(var(--snake-bow-x, 0) * 0.62px),
+        calc(var(--snake-bow-y, 0) * 0.34px),
+        0
+      )
+      rotate(calc(var(--snake-bow-rotate, 0) * 0.95deg)) !important;
+  }
+
+  .dossier-character-art .lari-hand-2 {
+    transform:
+      translate3d(
+        calc(var(--snake-jar-x, 0) * 0.22px),
+        calc(var(--snake-jar-y, 0) * 0.16px),
+        0
+      )
+      rotate(calc(var(--snake-jar-rotate, 0) * 0.35deg)) !important;
+  }
+
+  .dossier-character-art .lari-legs {
+    transform:
+      translate3d(
+        calc(var(--snake-skirt-x, 0) * 0.04px),
+        calc(var(--snake-skirt-y, 0) * 0.03px),
+        0
+      )
+      rotate(calc(var(--snake-skirt-rotate, 0) * 0.06deg)) !important;
+  }
+}
